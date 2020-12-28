@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Request View</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+</head>
+<body class="back-img">
+<div class="logout-button">
+    <form action="logout" method="get">
+        <input class="home-button" type="submit" value="Logout">
+    </form>
+</div>
+<div><a href="employee_home.html" style="text-decoration: none;">Home</a></div>
+    <div class="order-select">
+        <form id="table-order">
+            <lable for="order-select">Filter Requests by Status</lable>
+            <select id="order-select" name="order" onchange="renderRequests()">
+                <option value="ALL" selected>ALL</option>
+                <option value="APPROVED">APPROVED</option>
+                <option value="DENIED">DENIED</option>
+                <option value="PENDING">PENDING</option>
+            </select>
+        </form>
+    </div>
+    <div class = "table-responsive tbl">
+        <table class="table table-dark">
+            <thead>
+                <tr>
+                    <th scope="col">Request ID</th>
+                    <th scope="col">Amount</th>
+                    <th scope="col">Description</th>
+                    <th scope="col">Status</th>
+                    <th scope="col">Manager ID</th>
+                </tr>
+            </thead>
+            <tbody class="table-data" style="color: black"></tbody>
+        </table>
+    </div>
+
+    <script>
+        let orderContainer = document.querySelector('#order-select');
+        const fetchRequests = async () => {
+            const requestResponse = await fetch('http://localhost:8080/ERS/home/employee/requests');
+            return await requestResponse.json();
+        }
+        const renderRequests = async () => {
+            let requests = await fetchRequests();
+            let html ='';
+            if (requests.body != null) {
+                requests.body.forEach(request => {
+                    if (orderContainer.value === 'ALL' || orderContainer.value === request.status) {
+                        let color;
+                        if (request.status === 'PENDING') {
+                            color = 'bg-warning';
+                        } else if (request.status === 'APPROVED') {
+                            color = 'bg-success';
+                        } else {
+                            color = 'bg-danger';
+                        }
+                        let htmlSegment =
+                            `<tr class="${color}">
+                                <th scope="row">${request.id}</th>
+                                <th>${request.amount}</th>
+                                <th>${request.description}</th>
+                                <th>${request.status}</th>
+                                <th>${request.managerId}</th>
+                            </tr>`
+                        html += htmlSegment;
+                    }
+                });
+                let requestContainer = document.querySelector('.table-data');
+                requestContainer.innerHTML = html;
+            } else {
+                alert(requests.message);
+            }
+        }
+        renderRequests();
+    </script>
+</body>
+</html>

@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Register Employee</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body class="back-img">
+<div class="logout-button">
+    <form action="logout" method="get">
+        <input class="home-button" type="submit" value="Logout">
+    </form>
+</div>
+<div><a href="manager_home.html">Home</a></div>
+<div class= "info-display">
+    <h2>Information Entry</h2>
+    <form id="register">
+
+        <label for="firstName">First Name:</label>
+        <input type="text" id="firstName" name="firstName"><br><br>
+
+        <label for="lastName">Last Name:</label>
+        <input type="text" id="lastName" name="lastName"><br><br>
+
+        <label for="email">Email:</label>
+        <input type="text" id="email" name="email"><br><br>
+
+        <label for="password">Password:</label>
+        <input type="text" id="password" name="password"><br><br>
+
+        <label for="address">Address:</label>
+        <input type="text" id="address" name="address"><br><br>
+
+        <label for="role">Role:</label>
+        <select id="role" name="role">
+            <option value="none" selected disabled hidden>Role...</option>
+            <option value = "EMPLOYEE">EMPLOYEE</option>
+            <option value = "EMPLOYEE">MANAGER</option>
+        </select><br><br>
+
+        <input class="button" type="submit" value="Register New Employee">
+
+    </form>
+</div>
+<div id="feedback"></div>
+<script>
+    const registerForm = document.querySelector('#register');
+    const firstNameInput = document.querySelector('#firstName');
+    const lastNameInput = document.querySelector('#lastName');
+    const emailInput = document.querySelector('#email');
+    const passwordInput = document.querySelector('#password');
+    const addressInput = document.querySelector('#address');
+    const roleInput = document.querySelector('#role');
+    const feedback = document.querySelector('#feedback');
+    registerForm.addEventListener('submit', async (evt) => {
+        evt.preventDefault();
+        const searchParams = new URLSearchParams();
+        searchParams.append('firstName', firstNameInput.value);
+        searchParams.append('lastName', lastNameInput.value);
+        searchParams.append('email', emailInput.value);
+        searchParams.append('password', passwordInput.value);
+        searchParams.append('address', addressInput.value);
+        searchParams.append('role', roleInput.value);
+        const response = await fetch('http://localhost:8080/ERS/home/manager/register' , {
+            method: 'POST',
+            headers : {
+                'Content-Type': 'application/x-www-form-urlencoded'
+            },
+            body: searchParams
+        });
+        const obj = await response.json();
+        feedback.innerHTML = obj.message;
+        registerForm.reset();
+    })
+</script>
+</body>
+</html>

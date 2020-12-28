@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Update Information</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body class="back-img">
+<div class="logout-button">
+    <form action="logout" method="get">
+        <input class="home-button" type="submit" value="Logout">
+    </form>
+</div>
+<div class="h-button"><a href="employee_home.html">Home</a></div>
+    <div class="info-display">
+        <h2>Profile Information</h2>
+        <p class="info-head">First Name:</p>
+        <div id="firstName"></div>
+        <p class="info-head">Last Name:</p>
+        <div id="lastName"></div>
+        <p class="info-head">Email:</p>
+        <div id="email"></div>
+        <p class="info-head">Address:</h3>
+        <div id="address"></div>
+        <form id="infoEdit">
+
+            <label for="info">Choose What Information to Change:</label>
+            <select id="info" name="info">
+                <option value="none" selected disabled hidden>Entry...</option>
+                <option value = "email">Email</option>
+                <option value = "password">Password</option>
+                <option value = "address">Address</option>
+            </select><br>
+            <br>
+            <label for="data">New Information</label>
+            <input type="text" id="data" name="data"><br><br>
+    
+            <input class="button" type="submit" value="Update Information">
+        </form>
+        <div id="feedback"></div>
+    </div>   
+<script>
+    const firstName = document.querySelector('#firstName');
+    const lastName = document.querySelector('#lastName');
+    const email = document.querySelector('#email');
+    const address = document.querySelector('#address');
+
+    const fetchEmployee = async () => {
+        const employeeResponse = await fetch('http://localhost:8080/ERS/home/employee');
+        return await employeeResponse.json();
+    }
+
+    const renderEmployee = async () => {
+        let user = await fetchEmployee();
+        console.log(user.body);
+        firstName.innerHTML = user.body.firstName;
+        lastName.innerHTML = user.body.lastName;
+        email.innerHTML = user.body.email;
+        address.innerHTML = user.body.address;
+    }
+    renderEmployee();
+    const infoForm = document.querySelector('#infoEdit');
+    const infoInput = document.querySelector('#info');
+    const dataInput = document.querySelector('#data');
+    const feedback = document.querySelector('#feedback');
+    feedback.innerHTML = '';
+    infoForm.addEventListener('submit', async (evt) => {
+        evt.preventDefault();
+        const searchParams = new URLSearchParams();
+        searchParams.append('info',infoInput.value);
+        searchParams.append('data',dataInput.value);
+        const resp = await fetch('http://localhost:8080/ERS/home/employee/editInfo', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded'
+            },
+            body: searchParams
+        });
+        const obj = await resp.json();
+        if(obj.type === 'error') {
+            feedback.innerHTML = obj.message;
+            infoForm.reset();
+        } else {
+            location.reload();
+        }
+    });
+</script>
+</body>
+</html>

@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Request View</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+</head>
+<body class="back-img">
+<div class="logout-button">
+    <form action="logout" method="get">
+        <input class= "home-button" type="submit" value="Logout">
+    </form>
+</div>
+<div><a href="manager_home.html">Home</a></div>
+<div class = "table-responsive">
+    <table class="table table-light table-striped">
+        <thead class="thead-dark">
+        <tr>
+            <th scope="col">Employee ID</th>
+            <th scope="col">First Name</th>
+            <th scope="col">Last Name</th>
+            <th scope="col">Email</th>
+            <th scope="col">Address</th>
+        </tr>
+        </thead>
+        <tbody class="table-data"></tbody>
+    </table>
+</div>
+<script>
+    const fetchEmployees = async () => {
+        const employeeResponse = await fetch('http://localhost:8080/ERS/home/manager/employees');
+        return await employeeResponse.json();
+    }
+    const renderEmployees = async () => {
+        let employees = await fetchEmployees();
+        let html ='';
+        employees.body.forEach(employee => {
+            if(employee.role === 'EMPLOYEE') {
+                let htmlSegment =
+                    `<tr>
+                        <th scope="row">${employee.id}</th>
+                        <th>${employee.firstName}</th>
+                        <th>${employee.lastName}</th>
+                        <th>${employee.email}</th>
+                        <th>${employee.address}</th>
+                    </tr>`
+                html += htmlSegment;
+            }
+        });
+        let employeeContainer = document.querySelector('.table-data');
+        employeeContainer.innerHTML = html;
+    }
+    renderEmployees();
+</script>
+</body>
+</html>

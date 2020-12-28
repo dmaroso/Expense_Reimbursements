@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Death Star ERS</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body class="back-img">
+<div class="entry-box">
+    <form id ="login">
+
+        <label for="email">Email:</label>
+        <input type="text" id="email" name="email"><br>
+
+        <label for="pass">Password:</label>
+        <input type="password" id="pass" name="pass"><br>
+
+        <input class = "button" type="submit" value="Login">
+
+    </form>
+</div>
+<div id="loader" style="display: none">Authenticating...</div>
+<div id="feedback"></div>
+<script>
+    const loginForm = document.querySelector('#login');
+    const emailInput = document.querySelector('#login #email');
+    const passInput = document.querySelector('#login #pass');
+    const feedback = document.querySelector('#feedback');
+    const loader = document.querySelector('#loader');
+    loginForm.addEventListener('submit', async (evt) => {
+        evt.preventDefault();
+        const searchParams = new URLSearchParams();
+        searchParams.append('email',emailInput.value);
+        searchParams.append('pass',passInput.value);
+        loader.style.display = 'block';
+        const resp = await fetch('http://localhost:8080/ERS/login', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded'
+            },
+            body: searchParams
+        });
+        const obj = await resp.json();
+        loader.style.display = 'none';
+        if(obj.type === 'error') {
+            feedback.innerHTML = obj.message;
+            loginForm.reset();
+        } else if (obj.type === 'manager') {
+            window.location = "http://localhost:8080/ERS/manager_home.html"
+        } else {
+            window.location = "http://localhost:8080/ERS/employee_home.html"
+        }
+    });
+</script>
+</body>
+</html>

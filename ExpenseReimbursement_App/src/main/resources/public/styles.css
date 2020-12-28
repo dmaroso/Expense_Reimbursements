@@ -1,0 +1,106 @@
+@import url(https://fonts.googleapis.com/css2?family=Teko&display=swap);
+* {
+    box-sizing: border-box;
+    font-family: 'Teko', sans-serif;
+    color: lightgray;
+}
+html,body {
+    margin: 0;
+    padding: 0;
+}
+.nav ul {
+    margin: 0;
+}
+.nav li {
+    display: inline;
+}
+.nav a {
+    display: inline-block;
+    padding: .5em;
+    color: white;
+    text-decoration: none;
+}
+.main-nav {
+    text-align: center;
+    font-size: 2em;
+    font-weight: lighter;
+    border-bottom: 1px solid rgba(255, 255, 255, .3);
+}
+.main-nav li{
+    padding: 0 5%;
+}
+.nav a:hover {
+    background-color: rgba(255, 255, 255, .5);
+}
+.back-img {
+    background-color: rgba(0,0,0,.5);
+    background-image: url("imgs/empire_logo.png");
+    background-blend-mode: multiply;
+    background-size: cover;
+    padding-bottom: 30px;
+}
+.menu {
+    text-align: center;
+    font-size: 4em;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+}
+.entry-box {
+    position: fixed;
+    top: 53%;
+    left: 40%;
+    background-color: rgb(112, 29, 29);
+    width: 300px;
+    height: 150px;
+    text-align: center;
+    font-size: 2em;
+}
+.info-display {
+    margin: 1em;
+    position: fixed;
+    top: 25%;
+    left: 40%;
+    background-color: rgb(112, 29, 29);
+    width: 300px;
+    height: 500px;
+    text-align: center;
+    font-size: 1em;
+}
+.button {
+    color: black;
+    font-size: 1em;
+}
+.logout-button {
+    margin: 1em;
+    padding: 1em;
+    position: fixed;
+    left: 90%;
+}
+.h-button {
+    position: fixed;
+    left: 0%;
+}
+.home-button, button {
+    color: black;
+    font-size: 2em;
+}
+option {
+    color: black;
+}
+.page-title {
+    text-align: center;
+    margin: 0;
+    font-size: 4em;
+}
+.tbox {
+    width:50px;
+    height:30px;
+}
+.info-head {
+    font-weight: bold;
+    font-size: 1em;
+}
+input, tbody>tr>th {
+    color: black;
+}
